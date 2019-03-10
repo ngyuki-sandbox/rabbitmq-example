@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+
+  rabbitmq:
+    image: rabbitmq:3-alpine
+    ports:
+      - 5672:5672
+    environment:
+      RABBITMQ_DEFAULT_USER: ore
+      RABBITMQ_DEFAULT_PASS: pass
