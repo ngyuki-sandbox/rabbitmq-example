@@ -1,11 +1,63 @@
-version: '3'
+version: '3.4'
 
 services:
 
-  rabbitmq:
-    image: rabbitmq:3-alpine
+  mq01:
+    image: rabbitmq:3.7-management-alpine
+    container_name: mq01
+    hostname: mq01
+    networks:
+      default:
+        aliases:
+          - discovery.local
     ports:
       - 5672:5672
+      - 15672:15672
     environment:
+      RABBITMQ_ERLANG_COOKIE: DDDGAVLIIZYNOSSJGBVN
       RABBITMQ_DEFAULT_USER: ore
       RABBITMQ_DEFAULT_PASS: pass
+    volumes:
+      - ./rabbitmq-conf/:/etc/rabbitmq/:ro
+      - mq01:/var/lib/rabbitmq
+
+  mq02:
+    image: rabbitmq:3.7-management-alpine
+    container_name: mq02
+    hostname: mq02
+    networks:
+      default:
+        aliases:
+          - discovery.local
+    environment:
+      RABBITMQ_ERLANG_COOKIE: DDDGAVLIIZYNOSSJGBVN
+      RABBITMQ_DEFAULT_USER: ore
+      RABBITMQ_DEFAULT_PASS: pass
+    ports:
+      - 5673:5672
+    volumes:
+      - ./rabbitmq-conf/:/etc/rabbitmq/:ro
+      - mq02:/var/lib/rabbitmq
+
+  mq03:
+    image: rabbitmq:3.7-management-alpine
+    container_name: mq03
+    hostname: mq03
+    networks:
+      default:
+        aliases:
+          - discovery.local
+    environment:
+      RABBITMQ_ERLANG_COOKIE: DDDGAVLIIZYNOSSJGBVN
+      RABBITMQ_DEFAULT_USER: ore
+      RABBITMQ_DEFAULT_PASS: pass
+    ports:
+      - 5674:5672
+    volumes:
+      - ./rabbitmq-conf/:/etc/rabbitmq/:ro
+      - mq03:/var/lib/rabbitmq
+
+volumes:
+  mq01:
+  mq02:
+  mq03:
